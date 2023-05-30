@@ -1,0 +1,15 @@
+h,Heal,30
+a,Attack Potion,30
+hc,Hit Chance Potion,20
+h,Super Heal,50
+a,Attack Potion+,40
+hc,Hit Chance Potion+,25
+h,Super Heal+,60
+a,Attack Potion++,50
+hc,Hit Chance Potion++,40
+h,Heal+,35
+a,Super Attack Potion,45
+hc,Hit Chance Potion,20
+h,Hyper Heal,85
+a,Super Sword,65
+hc,Weapon Grip,35

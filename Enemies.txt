@@ -1,0 +1,8 @@
+n,Slime,60,30,30
+b,Slime Boss,80,35,35,50
+n,Zombie,60,30,30
+n,Glowing Zombie,80,40,35
+b,Zombie Boss,80,40,40,65
+n,Goblin,80,45,30
+n,Undead Goblin,70,55,35
+b,Goblin Leader,110,45,35,70

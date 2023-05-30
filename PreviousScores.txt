@@ -1,0 +1,3 @@
+Name: Jonathan Health: 159/190 Damage: 120 Hit Chance: 70% Survived: true
+Name: Gonj3 Health: 61/270 Damage: 80 Hit Chance: 110% Survived: true
+Name: Spagnerf Health: 136/190 Damage: 140 Hit Chance: 60% Survived: true

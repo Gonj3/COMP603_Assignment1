@@ -14,6 +14,7 @@ public class Enemy extends Character {
     */
     public Enemy(String name, int health, int damage, int hitChance) {
         super(name, health, damage, hitChance);
+        //test
     }
     
    

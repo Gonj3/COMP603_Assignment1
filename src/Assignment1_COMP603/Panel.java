@@ -7,13 +7,14 @@ package Assignment1_COMP603;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
  *
  * @author jonat
  */
-public class Panel extends JPanel {
+public class Panel extends JPanel{ 
     ArrayList<Item> items;
     LinkedList<Character> enemies;
     public Panel(ArrayList<Item> items, LinkedList<Character> enemies)
@@ -26,5 +27,11 @@ public class Panel extends JPanel {
     public void paint(Graphics g) {
         g.drawString(enemies.get(0).name, 50, 50);
         this.repaint();
+    }
+    
+    private void mainMenu()
+    {
+        JButton startGame = new JButton("Start Game");
+        
     }
 }

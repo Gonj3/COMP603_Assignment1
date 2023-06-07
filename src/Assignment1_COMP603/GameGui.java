@@ -4,6 +4,10 @@
  */
 package Assignment1_COMP603;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,14 +16,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
  * @author jonat
  */
-public class GameGui {
-   
+public class GameGui implements ActionListener{
+    JButton startGame = new JButton("Start Game");
+    JPanel panelMainMenu = new JPanel();
+    JButton prevScores = new JButton("Previous Scores");
+
+    
     public static void main(String[] args) {
+        GameGui gameGui = new GameGui();
         DBManager dataBase = new DBManager();
         dataBase.establishConnection();
         ArrayList<Item> items = new ArrayList<Item>();
@@ -32,10 +42,18 @@ public class GameGui {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 600);
         frame.setVisible(true);
-        JButton test = new JButton("Hello");
-        frame.add(test);
-        Panel panel = new Panel(items, enemies);
-        frame.add(panel);
+        gameGui.mainMenu(gameGui.panelMainMenu);
+        frame.add(gameGui.panelMainMenu, BorderLayout.SOUTH);
+    }
+    
+    private void mainMenu(JPanel panel)
+    {
+        this.startGame.setPreferredSize(new Dimension(100, 40));
+        this.prevScores.setPreferredSize(new Dimension(100, 40));
+        this.startGame.addActionListener(this);
+        this.prevScores.addActionListener(this);
+        panel.add(startGame, BorderLayout.SOUTH);
+        panel.add(prevScores, BorderLayout.SOUTH);
     }
     
     private static void loadItems(ArrayList<Item> items, DBManager dataBase)
@@ -91,6 +109,21 @@ public class GameGui {
             Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(enemies);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        
+        if(source == startGame)
+        {
+            System.out.println("Start Game clicked");
+            this.panelMainMenu.removeAll();
+        }
+        if(source == prevScores)
+        {
+            System.out.println("prev Scores clicked");
+        }
     }
     
     

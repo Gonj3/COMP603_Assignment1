@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Jun 07 18:37:50 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-9493-7046-000000b3c020 
+on database directory C:\Users\jonat\Documents\NetBeansProjects\COMP603_Assignment1\dist\RpgGame with class loader sun.misc.Launcher$AppClassLoader@52e922 
+Loaded from file:/C:/Users/jonat/Documents/NetBeansProjects/COMP603_Assignment1/dist/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_361-b09
+user.dir=C:\Users\jonat\Documents\NetBeansProjects\COMP603_Assignment1\dist
+os.name=Windows 11
+os.arch=x86
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

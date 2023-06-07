@@ -36,7 +36,7 @@ public class Game {
     c.
     quits the program.
     */
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         ArrayList<Item> items = new ArrayList<Item>();
         LinkedList<Character> enemies = new LinkedList<Character>();
         try {
@@ -170,5 +170,5 @@ public class Game {
             }
         }
         
-    }
+    }*/
 }

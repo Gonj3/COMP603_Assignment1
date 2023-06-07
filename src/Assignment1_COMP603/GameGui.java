@@ -27,6 +27,7 @@ public class GameGui {
         LinkedList<Character> enemies = new LinkedList<Character>();
         System.out.println(dataBase.getConnection());
         loadItems(items, dataBase);
+        loadEnemies(enemies, dataBase);
         dataBase.closeConnections();
         JFrame frame = new JFrame("RPG_Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,8 +67,29 @@ public class GameGui {
         System.out.println(items);
     }
     
-    private static void loadEnemies(LinkedList<Character> enemies, DBManager database)
-    {
+    private static void loadEnemies(LinkedList<Character> enemies, DBManager dataBase)
+    {   
+        String sqlStatement = "SELECT * FROM ENEMIES";
+        ResultSet rs = dataBase.queryDB(sqlStatement);
         
+        try {
+            while(rs.next())
+            {
+                if(rs.getBoolean(1))
+                {
+                    Boss enemy = new Boss(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6));
+                    enemies.add(enemy);
+                }
+                else
+                {
+                    Enemy enemy = new Enemy(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+                    enemies.add(enemy);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(enemies);
     }
+    
 }

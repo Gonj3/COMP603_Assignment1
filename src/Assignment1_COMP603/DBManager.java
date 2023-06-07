@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public final class DBManager {
     private static final String USERNAME = "RpgGame";
     private static final String PASSWORD = "RpgGame";
-    private static final String URL = "jdbc:derby:RpgGame;create=true"; 
+    private static final String URL = "jdbc:derby:RpgGame;create=true";
     Connection conn;
     
     public DBManager()
@@ -35,6 +35,11 @@ public final class DBManager {
         if (this.conn == null) {
             
             try {
+                try {
+                    Class.forName("org.apache.derby.jdbc.ClientDriver");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             } catch (SQLException ex) {
                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);

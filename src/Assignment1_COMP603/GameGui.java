@@ -6,7 +6,6 @@ package Assignment1_COMP603;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -35,6 +34,8 @@ public class GameGui {
         frame.setVisible(true);
         JButton test = new JButton("Hello");
         frame.add(test);
+        Panel panel = new Panel(items, enemies);
+        frame.add(panel);
     }
     
     private static void loadItems(ArrayList<Item> items, DBManager dataBase)
@@ -91,5 +92,7 @@ public class GameGui {
         }
         System.out.println(enemies);
     }
+    
+    
     
 }

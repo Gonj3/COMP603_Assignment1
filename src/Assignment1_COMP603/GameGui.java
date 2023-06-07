@@ -30,8 +30,6 @@ public class GameGui {
         dataBase.closeConnections();
         JFrame frame = new JFrame("RPG_Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Panel panel = new Panel();
-        //frame.add(panel);
         frame.setSize(700, 600);
         frame.setVisible(true);
         JButton test = new JButton("Hello");
@@ -40,18 +38,32 @@ public class GameGui {
     
     private static void loadItems(ArrayList<Item> items, DBManager dataBase)
     {
-        String sqlStatement = "SELECT NAME FROM ITEMS";
+        String sqlStatement = "SELECT * FROM ITEMS";
         ResultSet rs = dataBase.queryDB(sqlStatement);
+        
         try {
-            rs.next();
+            while(rs.next())
+            {
+                if(rs.getString(1).charAt(0) == 'h')
+                {
+                    HealingItem item = new HealingItem(rs.getString(2), rs.getInt(3));
+                    items.add(item);
+                }
+                else if(rs.getString(1).charAt(0) == 'a')
+                {
+                    DamageItem item = new DamageItem(rs.getString(2), rs.getInt(3));
+                    items.add(item);
+                }
+                else if(rs.getString(1).charAt(0) == 'c')
+                {
+                    HitChanceItem item = new HitChanceItem(rs.getString(2), rs.getInt(3));
+                    items.add(item);
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            System.out.println(rs.getString(1));
-        } catch (SQLException ex) {
-            Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println(items);
     }
     
     private static void loadEnemies(LinkedList<Character> enemies, DBManager database)

@@ -9,16 +9,18 @@ package Assignment1_COMP603;
  * @author jonat
  */
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-
-public class BattleField{
+public class BattleField {
     private Player player;
     private Character enemy;
     private ArrayList<Item> items;
+    public String attackInfo;
+    
     
 /*
 Constructor for BattleField class
@@ -28,8 +30,47 @@ Constructor for BattleField class
         this.player = player; 
         this.enemy = enemy;
         this.items = items;
+        this.attackInfo = null;
     }
-    /*
+
+    public boolean Attack()
+    {
+        while(player.isAlive == true && enemy.isAlive == true)
+        {
+            int playerAttack = player.attack();
+            enemy.attacked(playerAttack);
+            System.out.println(enemy.toString());
+
+            int enemyAttack = enemy.attack();
+            player.attacked(enemyAttack);
+            System.out.println(player.toString());
+            this.attackInfo = this.player.name + " was hit for " + Integer.toString(enemyAttack) + ", " + this.enemy.name + " was hit for " + Integer.toString(playerAttack);
+            
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isPlayerAlive()
+    {
+        return this.player.isAlive;
+    }
+    
+    public boolean isEnemyAlive()
+    {
+        return this.enemy.isAlive;
+    }
+    
+    public String getPlayerToString()
+    {
+        return this.player.toString();
+    }
+    
+    public String getEnemyToString()
+    {
+        return this.enemy.toString();
+    }
+        /*
     runs the encounter between the player and the enemy. 
     when the player defeats the enemy they choose a stat to upgrade.
     if the enemy was a boss they also find a random item and it is added to the player item storage.

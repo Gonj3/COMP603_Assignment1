@@ -4,8 +4,9 @@
  */
 package Assignment1_COMP603;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,57 +25,130 @@ import javax.swing.JTextField;
  *
  * @author jonat
  */
-public class GameGui implements ActionListener{
-    JButton startGame = new JButton("Start Game");
-    JPanel panelMainMenu = new JPanel();
-    JPanel panelGame = new JPanel();
-    JButton prevScores = new JButton("Previous Scores");
+public class GameGui extends Frame implements ActionListener{
+    JButton startGame;
+    JPanel panelMainMenu;
+    JPanel panelGame;
+    JButton prevScores;
     JTextField userNameInput = new JTextField("", 30);
     JButton userNameSubmit = new JButton("Submit");
     JFrame frame = new JFrame("RPG_Game");
+    JButton attackButton = new JButton("Attack");
+    JLabel playerLabel;
+    JLabel enemyLabel;
+    JLabel attackInfo;
+    JLabel finalAttackInfo;
     boolean userNameInputed;
-
+    Player player;
+    BattleField battle;
+    ArrayList<Item> items = new ArrayList<Item>();
+    LinkedList<Character> enemies = new LinkedList<Character>();
+    
+    public GameGui()
+    {
+        this.panelGame = new JPanel(new GridLayout(8, 1));
+    }
     
     public static void main(String[] args) {
         GameGui gameGui = new GameGui();
         DBManager dataBase = new DBManager();
         dataBase.establishConnection();
-        ArrayList<Item> items = new ArrayList<Item>();
-        LinkedList<Character> enemies = new LinkedList<Character>();
         System.out.println(dataBase.getConnection());
-        loadItems(items, dataBase);
-        loadEnemies(enemies, dataBase);
+        gameGui.loadEnemies(gameGui.enemies, dataBase);
+        gameGui.loadItems(gameGui.items, dataBase);
         dataBase.closeConnections();
         gameGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameGui.frame.setSize(700, 600);
         gameGui.frame.setVisible(true);
         gameGui.mainMenu();
-        gameGui.frame.add(gameGui.panelMainMenu, BorderLayout.SOUTH);
+       // gameGui.frame.add(gameGui.panelMainMenu, BorderLayout.SOUTH);
         gameGui.frame.setVisible(true);
     }
     
     private void mainMenu()
     {
+        panelMainMenu = new JPanel();
+        startGame = new JButton("Start Game");
+        prevScores = new JButton("Previous Scores");
         this.startGame.setPreferredSize(new Dimension(100, 40));
         this.prevScores.setPreferredSize(new Dimension(100, 40));
         this.startGame.addActionListener(this);
         this.prevScores.addActionListener(this);
-        panelMainMenu.add(startGame, BorderLayout.SOUTH);
-        panelMainMenu.add(prevScores, BorderLayout.SOUTH);
+        panelMainMenu.add(startGame);
+        panelMainMenu.add(prevScores);
+        this.frame.add(this.panelMainMenu);
+        this.frame.setVisible(true);
     }
     
-    private void game()
+    private void createUser()
     {
         this.userNameInputed = false;
         this.userNameSubmit.addActionListener(this);
+        this.userNameSubmit.setPreferredSize(new Dimension(100,50));
         this.panelGame.add(userNameInput);
         this.panelGame.add(userNameSubmit);
-        this.frame.add(this.panelGame, BorderLayout.CENTER);
+        this.frame.add(this.panelGame);
         this.frame.setVisible(true);
         
     }
     
-    private static void loadItems(ArrayList<Item> items, DBManager dataBase)
+    private void battleStart()
+    {
+        this.battle = new BattleField(this.player, this.enemies.get(0), this.items);
+        System.out.println("tset");
+        //battle.mainBattle();
+        //this.frame.add(battle.panel, BorderLayout.CENTER);
+        this.attackButton.addActionListener(this);
+        this.playerLabel = new JLabel(this.battle.getPlayerToString());
+        this.enemyLabel = new JLabel(this.battle.getEnemyToString());
+        this.panelGame.add(attackButton);
+        this.panelGame.add(this.playerLabel);
+        this.panelGame.add(this.enemyLabel);
+        this.frame.setVisible(true);
+    }
+    
+    private void battle()
+    {
+        this.panelGame.removeAll();
+        if(this.battle.isPlayerAlive() && this.battle.isEnemyAlive())
+        {
+            this.playerLabel = new JLabel(this.battle.getPlayerToString());
+            this.enemyLabel = new JLabel(this.battle.getEnemyToString());
+            this.panelGame.add(this.attackButton);
+            this.panelGame.add(this.playerLabel);
+            this.panelGame.add(this.enemyLabel);
+            if(!this.battle.attackInfo.equals(null))
+            {
+                this.attackInfo = new JLabel(this.battle.attackInfo);
+                this.panelGame.add(this.attackInfo);
+            }
+            this.frame.setVisible(true);
+        }
+        else{
+            this.panelGame.removeAll();
+            this.panelGame.repaint();
+            this.attackInfo = null;
+            this.playerLabel = new JLabel(this.battle.getPlayerToString());
+            this.enemyLabel = new JLabel(this.battle.getEnemyToString());
+            this.panelGame.add(this.playerLabel);
+            this.panelGame.add(this.enemyLabel);
+            String battleInfo;
+            if(this.battle.isPlayerAlive())
+            {
+                battleInfo = "You Won!!! " + this.battle.attackInfo;
+                this.finalAttackInfo = new JLabel(battleInfo);
+            }
+            else{
+                battleInfo = "You Lost!!! " + this.battle.attackInfo;
+                this.finalAttackInfo = new JLabel(battleInfo);
+            }
+            this.panelGame.add(this.finalAttackInfo);
+            this.frame.setVisible(true);
+        }
+    }
+    
+    
+    private void loadItems(ArrayList<Item> items, DBManager dataBase)
     {
         String sqlStatement = "SELECT * FROM ITEMS";
         ResultSet rs = dataBase.queryDB(sqlStatement);
@@ -103,7 +178,7 @@ public class GameGui implements ActionListener{
         System.out.println(items);
     }
     
-    private static void loadEnemies(LinkedList<Character> enemies, DBManager dataBase)
+    private void loadEnemies(LinkedList<Character> enemies, DBManager dataBase)
     {   
         String sqlStatement = "SELECT * FROM ENEMIES";
         ResultSet rs = dataBase.queryDB(sqlStatement);
@@ -136,7 +211,7 @@ public class GameGui implements ActionListener{
         {
             System.out.println("Start Game clicked");
             this.panelMainMenu.removeAll();
-            this.game();
+            this.createUser();
         }
         if(source == prevScores)
         {
@@ -151,11 +226,15 @@ public class GameGui implements ActionListener{
             }
             else{
                 this.userNameInputed = true;
+                this.player = new Player(username, 150, 40, 40);
+                this.panelGame.removeAll();
+                this.battleStart();
             }
-            
+        }
+        if(source == attackButton)
+        {
+            this.battle.Attack();
+            this.battle();
         }
     }
-    
-    
-    
 }

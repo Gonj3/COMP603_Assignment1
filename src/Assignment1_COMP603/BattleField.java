@@ -51,6 +51,19 @@ Constructor for BattleField class
         return false;
     }
     
+    public Item givePlayerItem()
+    {
+        Random random = new Random();
+        int randomIndex = random.nextInt(items.size());
+        player.addItem(items.get(randomIndex));
+        return items.get(randomIndex);
+    }
+    
+    public boolean isEnemyBoss()
+    {
+        return (this.enemy instanceof Boss);
+    }
+    
     public boolean isPlayerAlive()
     {
         return this.player.isAlive;

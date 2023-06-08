@@ -30,6 +30,7 @@ public class GameGui extends Frame implements ActionListener{
     JPanel panelMainMenu;
     JPanel panelGame;
     JButton prevScores;
+     JButton nextButton;
     JTextField userNameInput = new JTextField("", 30);
     JButton userNameSubmit = new JButton("Submit");
     JFrame frame = new JFrame("RPG_Game");
@@ -94,7 +95,7 @@ public class GameGui extends Frame implements ActionListener{
     
     private void battleStart()
     {
-        this.battle = new BattleField(this.player, this.enemies.get(0), this.items);
+        this.battle = new BattleField(this.player, this.enemies.get(1), this.items);
         System.out.println("tset");
         //battle.mainBattle();
         //this.frame.add(battle.panel, BorderLayout.CENTER);
@@ -143,10 +144,29 @@ public class GameGui extends Frame implements ActionListener{
                 this.finalAttackInfo = new JLabel(battleInfo);
             }
             this.panelGame.add(this.finalAttackInfo);
+            
+            if(this.battle.isPlayerAlive() && this.battle.isEnemyBoss())
+            {
+                Item itemFound = this.battle.givePlayerItem();
+                JLabel foundItem = new JLabel("You found an Item!!! " + itemFound.toString());
+                this.panelGame.add(foundItem);
+            }
+            this.nextButton = new JButton("Next");
+            this.nextButton.addActionListener(this);
+            this.panelGame.add(this.nextButton);
             this.frame.setVisible(true);
         }
     }
     
+    private void upgradeMenu()
+    {
+        
+    }
+    
+    private void itemChooserMenu()
+    {
+        
+    }
     
     private void loadItems(ArrayList<Item> items, DBManager dataBase)
     {
@@ -235,6 +255,14 @@ public class GameGui extends Frame implements ActionListener{
         {
             this.battle.Attack();
             this.battle();
+        }
+        if(source == nextButton)
+        {
+            System.out.println("nextButton worked");
+            if(this.battle.isPlayerAlive())
+            {
+                this.upgradeMenu();
+            }
         }
     }
 }

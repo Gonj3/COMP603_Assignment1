@@ -9,14 +9,13 @@ package Assignment1_COMP603;
  * @author jonat
  */
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 
-public class BattleField implements ActionListener{
+public class BattleField{
     private Player player;
     private Character enemy;
     private ArrayList<Item> items;
@@ -147,10 +146,5 @@ Constructor for BattleField class
         {
             System.out.println("Oh No! \nYou Died!!! \n" + enemy.printName() + " beat you!");
         }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
     }
 }

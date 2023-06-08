@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -25,7 +26,12 @@ import javax.swing.JPanel;
 public class GameGui implements ActionListener{
     JButton startGame = new JButton("Start Game");
     JPanel panelMainMenu = new JPanel();
+    JPanel panelGame = new JPanel();
     JButton prevScores = new JButton("Previous Scores");
+    JTextField userNameInput = new JTextField("", 30);
+    JButton userNameSubmit = new JButton("Submit");
+    JFrame frame = new JFrame("RPG_Game");
+    boolean userNameInputed;
 
     
     public static void main(String[] args) {
@@ -38,22 +44,33 @@ public class GameGui implements ActionListener{
         loadItems(items, dataBase);
         loadEnemies(enemies, dataBase);
         dataBase.closeConnections();
-        JFrame frame = new JFrame("RPG_Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 600);
-        frame.setVisible(true);
-        gameGui.mainMenu(gameGui.panelMainMenu);
-        frame.add(gameGui.panelMainMenu, BorderLayout.SOUTH);
+        gameGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameGui.frame.setSize(700, 600);
+        gameGui.frame.setVisible(true);
+        gameGui.mainMenu();
+        gameGui.frame.add(gameGui.panelMainMenu, BorderLayout.SOUTH);
+        gameGui.frame.setVisible(true);
     }
     
-    private void mainMenu(JPanel panel)
+    private void mainMenu()
     {
         this.startGame.setPreferredSize(new Dimension(100, 40));
         this.prevScores.setPreferredSize(new Dimension(100, 40));
         this.startGame.addActionListener(this);
         this.prevScores.addActionListener(this);
-        panel.add(startGame, BorderLayout.SOUTH);
-        panel.add(prevScores, BorderLayout.SOUTH);
+        panelMainMenu.add(startGame, BorderLayout.SOUTH);
+        panelMainMenu.add(prevScores, BorderLayout.SOUTH);
+    }
+    
+    private void game()
+    {
+        this.userNameInputed = false;
+        this.userNameSubmit.addActionListener(this);
+        this.panelGame.add(userNameInput);
+        this.panelGame.add(userNameSubmit);
+        this.frame.add(this.panelGame, BorderLayout.CENTER);
+        this.frame.setVisible(true);
+        
     }
     
     private static void loadItems(ArrayList<Item> items, DBManager dataBase)
@@ -119,10 +136,23 @@ public class GameGui implements ActionListener{
         {
             System.out.println("Start Game clicked");
             this.panelMainMenu.removeAll();
+            this.game();
         }
         if(source == prevScores)
         {
             System.out.println("prev Scores clicked");
+        }
+        if(source == userNameSubmit)
+        {
+            String username = this.userNameInput.getText();
+            if(username.equals(""))
+            {
+                
+            }
+            else{
+                this.userNameInputed = true;
+            }
+            
         }
     }
     

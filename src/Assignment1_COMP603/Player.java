@@ -253,6 +253,20 @@ public class Player extends Character {
         }
     }
     /*
+    returns this.damageItemIncrease
+    */
+    public int getDamageItemIncrease()
+    {
+        return this.damageItemIncrease;
+    }
+    /*
+    returns this.hitChanceItemIncrease
+    */
+    public int getHitChanceItemIncrease()
+    {
+        return this.hitChanceItemIncrease;
+    }
+    /*
     returns a String of information based on the Player.
     */
     @Override

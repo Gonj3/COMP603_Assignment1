@@ -31,6 +31,9 @@ public class GameGui extends Frame implements ActionListener{
     JPanel panelMainMenu;
     JPanel panelGame;
     JButton prevScores;
+    JButton prevView;
+    JButton prevDelete;
+    JButton toMainMenu;
     JButton nextButton;
     JButton attackUpgrade;
     JButton healthUpgrade;
@@ -76,7 +79,7 @@ public class GameGui extends Frame implements ActionListener{
     
     private void mainMenu()
     {
-        panelMainMenu = new JPanel();
+        panelMainMenu = new JPanel(new GridLayout(2,8));
         startGame = new JButton("Start Game");
         prevScores = new JButton("Previous Scores");
         this.startGame.setPreferredSize(new Dimension(100, 40));
@@ -86,8 +89,49 @@ public class GameGui extends Frame implements ActionListener{
         panelMainMenu.add(startGame);
         panelMainMenu.add(prevScores);
         this.frame.add(this.panelMainMenu);
+        this.frame.repaint();
         this.frame.setVisible(true);
         this.panelMainMenu.repaint();
+        this.panelMainMenu.setVisible(true);
+        
+    }
+    
+    private void prevScoreMenu()
+    {
+        this.prevView = new JButton("View Previous Scores");
+        this.prevView.addActionListener(this);
+        this.prevDelete = new JButton("Delete all previous scores");
+        this.prevDelete.addActionListener(this);
+        this.panelMainMenu.removeAll();
+        this.panelMainMenu.add(this.prevView);
+        this.panelMainMenu.add(this.prevDelete);
+        this.panelMainMenu.repaint();
+        this.frame.setVisible(true);
+    }
+    
+    private void viewPreviousScores()
+    {
+        String sqlStatement = "SELECT * FROM PREVIOUSSCORES";
+        ResultSet rs = dataBase.queryDB(sqlStatement);
+        this.panelMainMenu.removeAll();
+        this.panelMainMenu.repaint();
+        this.toMainMenu = new JButton("Main Menu");
+        this.toMainMenu.addActionListener(this);
+        this.panelMainMenu.add(this.toMainMenu);
+        try {
+            while(rs.next())
+            {
+                String output = "Name: " + rs.getString(1)+"Health: "+rs.getInt(2)+"/"+rs.getInt(3)+" Damage: "+rs.getInt(4)+"Hit Chance: "+rs.getInt(5);
+                JLabel label = new JLabel(output);
+                this.panelMainMenu.add(label);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.panelMainMenu.repaint();
+        this.panelMainMenu.setVisible(true);
+        this.frame.repaint();
+        this.frame.setVisible(true);
     }
     
     private void createUser()
@@ -95,6 +139,8 @@ public class GameGui extends Frame implements ActionListener{
         this.userNameInputed = false;
         this.userNameSubmit.addActionListener(this);
         this.userNameSubmit.setPreferredSize(new Dimension(100,50));
+        JLabel label = new JLabel("Please type a username below");
+        this.panelGame.add(label);
         this.panelGame.add(userNameInput);
         this.panelGame.add(userNameSubmit);
         this.frame.add(this.panelGame);
@@ -303,14 +349,19 @@ public class GameGui extends Frame implements ActionListener{
         }
         if(source == prevScores)
         {
-            System.out.println("prev Scores clicked");
+            this.prevScoreMenu();
         }
         if(source == userNameSubmit)
         {
             String username = this.userNameInput.getText();
             if(username.equals(""))
             {
-                
+                JLabel label = new JLabel("Please type a username into the entry box above");
+                this.panelGame.add(label);
+                this.panelGame.repaint();
+                this.panelGame.setVisible(true);
+                this.frame.repaint();
+                this.frame.setVisible(true);
             }
             else{
                 this.userNameInputed = true;
@@ -374,10 +425,43 @@ public class GameGui extends Frame implements ActionListener{
                     this.battle.Attack();
                     this.battle();
                 }
+                else{
+                    JLabel label = new JLabel("Please input a valid Number");
+                    this.panelGame.add(label);
+                    this.panelGame.repaint();
+                    this.panelGame.setVisible(true);
+                    this.frame.repaint();
+                    this.frame.setVisible(true);
+                }
             }
             catch(NumberFormatException ex){
-                
+                JLabel label = new JLabel("Please input a valid Number");
+                this.panelGame.add(label);
+                this.panelGame.repaint();
+                this.panelGame.setVisible(true);
+                this.frame.repaint();
+                this.frame.setVisible(true);
             }
+            
+        }
+        if(source == prevView)
+        {
+            this.viewPreviousScores();
+        }
+        if(source == prevDelete)
+        {
+            this.dataBase.updateDB("DELETE FROM PREVIOUSSCORES");
+            this.panelMainMenu.removeAll();
+            this.panelMainMenu.repaint();
+            this.frame.repaint();
+            this.mainMenu();
+        }
+        if(source == toMainMenu)
+        {
+            this.panelMainMenu.removeAll();
+            this.panelMainMenu.repaint();
+            this.frame.repaint();
+            this.mainMenu();
         }
     }
    }

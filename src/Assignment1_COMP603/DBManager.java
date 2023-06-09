@@ -22,15 +22,24 @@ public final class DBManager {
     private static final String URL = "jdbc:derby:RpgGame;create=true";
     Connection conn;
     
+    /*
+    DBManager contructor
+    */
     public DBManager()
     {
         establishConnection();
     }
     
+    /*
+    returns the Connection object this.conn
+    */
      public Connection getConnection() {
         return this.conn;
     }
     
+     /*
+     establishes connection with the database
+     */
     public void establishConnection() {
         if (this.conn == null) {
             
@@ -46,8 +55,10 @@ public final class DBManager {
             }
         }
     }
-    
-        public void closeConnections() {
+/*
+    closes connection to database
+    */
+    public void closeConnections() {
         if (conn != null) {
             try {
                 conn.close();
@@ -57,6 +68,10 @@ public final class DBManager {
         }
     }
 
+    /*
+    takes a string and querys the database
+    returns a ResultSet based on the queury
+    */
     public ResultSet queryDB(String sql) {
 
         Connection connection = this.conn;
@@ -73,6 +88,9 @@ public final class DBManager {
         return resultSet;
     }
 
+    /*
+    takes in a sql statement which modifies the database
+    */
     public void updateDB(String sql) {
 
         Connection connection = this.conn;

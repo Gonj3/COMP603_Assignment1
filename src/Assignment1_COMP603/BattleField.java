@@ -32,7 +32,12 @@ Constructor for BattleField class
         this.items = items;
         this.attackInfo = null;
     }
-
+    
+/*
+    runs an attack sequence between the player and enemy
+    information on this attack is then put into the String this.attackInfo
+    will return true or false whether the the attack happened based on enemy and player being alive.
+    */
     public boolean Attack()
     {
         while(player.isAlive == true && enemy.isAlive == true)
@@ -50,22 +55,30 @@ Constructor for BattleField class
         }
         return false;
     }
-    
+    /*
+    increases player health by 40
+    */
     public void upgradePlayerHealth()
     {
         this.player.increaseHealth(40);
     }
-    
+    /*
+    increase player attack by 20
+    */
     public void upgradePlayerAttack()
     {
         this.player.increaseDamage(20);
     }
-      
+    /*
+    increases player hit chance by 10
+    */  
     public void upgradePlayerHitChance()
     {
         this.player.hitChanceIncrease(10);   
     }
-    
+    /*
+    gives player a random items and returns the item that was given.
+    */
     public Item givePlayerItem()
     {
         Random random = new Random();
@@ -73,27 +86,37 @@ Constructor for BattleField class
         player.addItem(items.get(randomIndex));
         return items.get(randomIndex);
     }
-    
+    /*
+    returns boolean based of if enemy is instance of Boss
+    */
     public boolean isEnemyBoss()
     {
         return (this.enemy instanceof Boss);
     }
-    
+    /*
+    returns boolean based on player being alive
+    */
     public boolean isPlayerAlive()
     {
         return this.player.isAlive;
     }
-    
+    /*
+    returns boolean based on enemy being alive
+    */
     public boolean isEnemyAlive()
     {
         return this.enemy.isAlive;
     }
-    
+    /*
+    returns player toString
+    */
     public String getPlayerToString()
     {
         return this.player.toString();
     }
-    
+    /*
+    returns enemy toString
+    */
     public String getEnemyToString()
     {
         return this.enemy.toString();

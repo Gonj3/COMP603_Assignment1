@@ -56,6 +56,9 @@ public class GameGui extends Frame implements ActionListener{
     ArrayList<Item> items;
     LinkedList<Character> enemies;
     
+    /*
+    constructor for GameGui
+    */
     public GameGui()
     {
         this.panelGame = new JPanel(new GridLayout(8, 1));
@@ -84,6 +87,10 @@ public class GameGui extends Frame implements ActionListener{
         gameGui.frame.setVisible(true);
     }
     
+    /*
+    main menu method which adda all the buttons and adds ActionListener to buttons
+    then displays the panel
+    */
     private void mainMenu()
     {
         panelMainMenu = new JPanel(new GridLayout(2,8));
@@ -102,7 +109,9 @@ public class GameGui extends Frame implements ActionListener{
         this.panelMainMenu.setVisible(true);
         
     }
-    
+    /*
+    adds the prevScore menu buttons to the panel and adds the button functionality
+    */
     private void prevScoreMenu()
     {
         this.prevView = new JButton("View Previous Scores");
@@ -115,7 +124,9 @@ public class GameGui extends Frame implements ActionListener{
         this.panelMainMenu.repaint();
         this.frame.setVisible(true);
     }
-    
+    /*
+    querys the previousscores table in the database and places all entry in labels and displays them for the user
+    */
     private void viewPreviousScores()
     {
         String sqlStatement = "SELECT * FROM PREVIOUSSCORES";
@@ -141,6 +152,9 @@ public class GameGui extends Frame implements ActionListener{
         this.frame.setVisible(true);
     }
     
+    /*
+    adds the text fields and buttons for user creation on the the frame
+    */
     private void createUser()
     {
         this.userNameInputed = false;
@@ -157,6 +171,10 @@ public class GameGui extends Frame implements ActionListener{
         this.frame.setVisible(true);
     }
     
+    /*
+    starts a new battle with the player and an enemy and adds the buttons and labels
+    if the player has items it will also create a button for entering item use menu
+    */
     private void battleStart()
     {
         this.panelGame.removeAll();
@@ -192,6 +210,11 @@ public class GameGui extends Frame implements ActionListener{
         }
     }
     
+    /*
+    creates a menu for attacks after the first
+    displays info about the last attack
+    also checks if you have one the current battle and whether you found an item.
+    */
     private void battle()
     {
         this.panelGame.removeAll();
@@ -242,7 +265,9 @@ public class GameGui extends Frame implements ActionListener{
             this.frame.setVisible(true);
         }
     }
-    
+    /*
+    creates and displays an upgrade menu for user to choose there upgrade.
+    */
     private void upgradeMenu()
     {
         this.panelGame.removeAll();
@@ -259,6 +284,9 @@ public class GameGui extends Frame implements ActionListener{
         this.frame.setVisible(true);
     }
     
+    /*
+    create a menu that displays the user items and allows them to choose one.
+    */
     private void itemChooserMenu()
     {
         if(!this.player.itemsEmpty())
@@ -279,6 +307,9 @@ public class GameGui extends Frame implements ActionListener{
         }
     }
     
+    /*
+    loads items from the database into the items ArrayList.
+    */
     private void loadItems(ArrayList<Item> items, DBManager dataBase)
     {
         String sqlStatement = "SELECT * FROM ITEMS";
@@ -308,6 +339,9 @@ public class GameGui extends Frame implements ActionListener{
         }
     }
     
+    /*
+    loads enemies from the database and put them in a LinkedList.
+    */
     private void loadEnemies(LinkedList<Character> enemies, DBManager dataBase)
     {   
         String sqlStatement = "SELECT * FROM ENEMIES";
@@ -331,7 +365,11 @@ public class GameGui extends Frame implements ActionListener{
             Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /*
+    add functionality to all the buttons
+    when a button is pressed it is called and the method checks the source of the button
+    based on the source it will do a desired action of the button.
+    */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();

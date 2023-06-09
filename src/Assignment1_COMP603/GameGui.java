@@ -40,11 +40,11 @@ public class GameGui extends Frame implements ActionListener{
     JButton hitChanceUpgrade;
     JButton chooseItem;
     JButton submitItem;
-    JTextField itemInput = new JTextField("", 30);
-    JTextField userNameInput = new JTextField("", 30);
-    JButton userNameSubmit = new JButton("Submit");
-    JFrame frame = new JFrame("RPG_Game");
-    JButton attackButton = new JButton("Attack");
+    JTextField itemInput;
+    JTextField userNameInput;
+    JButton userNameSubmit;
+    JFrame frame;
+    JButton attackButton;
     JLabel playerLabel;
     JLabel enemyLabel;
     JLabel attackInfo;
@@ -53,14 +53,21 @@ public class GameGui extends Frame implements ActionListener{
     int enemyIndex;
     Player player;
     BattleField battle;
-    ArrayList<Item> items = new ArrayList<Item>();
-    LinkedList<Character> enemies = new LinkedList<Character>();
+    ArrayList<Item> items;
+    LinkedList<Character> enemies;
     
     public GameGui()
     {
         this.panelGame = new JPanel(new GridLayout(8, 1));
         this.enemyIndex = 0;
         this.dataBase = new DBManager();
+        this.itemInput = new JTextField("", 30);
+        this.userNameInput = new JTextField("", 30);
+        this.userNameSubmit = new JButton("Submit");
+        this.frame = new JFrame("RPG_GAME");
+        this.attackButton = new JButton("Attack");
+        this.items = new ArrayList<Item>();
+        this.enemies = new LinkedList<Character>();
     }
     
     public static void main(String[] args) {

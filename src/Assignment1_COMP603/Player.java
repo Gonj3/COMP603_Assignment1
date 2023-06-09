@@ -100,6 +100,11 @@ public class Player extends Character {
             return false;
         }
     }
+    
+    public Item getItem(int index)
+    {
+        return this.playerItems.get(index);
+    }
     /*
     takes in an index for an item to use.
     the item is then removed from the playerItems ArrayList.

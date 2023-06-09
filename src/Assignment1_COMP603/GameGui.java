@@ -26,6 +26,7 @@ import javax.swing.JTextField;
  * @author jonat
  */
 public class GameGui extends Frame implements ActionListener{
+    DBManager dataBase;
     JButton startGame;
     JPanel panelMainMenu;
     JPanel panelGame;
@@ -34,6 +35,9 @@ public class GameGui extends Frame implements ActionListener{
     JButton attackUpgrade;
     JButton healthUpgrade;
     JButton hitChanceUpgrade;
+    JButton chooseItem;
+    JButton submitItem;
+    JTextField itemInput = new JTextField("", 30);
     JTextField userNameInput = new JTextField("", 30);
     JButton userNameSubmit = new JButton("Submit");
     JFrame frame = new JFrame("RPG_Game");
@@ -53,16 +57,15 @@ public class GameGui extends Frame implements ActionListener{
     {
         this.panelGame = new JPanel(new GridLayout(8, 1));
         this.enemyIndex = 0;
+        this.dataBase = new DBManager();
     }
     
     public static void main(String[] args) {
         GameGui gameGui = new GameGui();
-        DBManager dataBase = new DBManager();
-        dataBase.establishConnection();
-        System.out.println(dataBase.getConnection());
-        gameGui.loadEnemies(gameGui.enemies, dataBase);
-        gameGui.loadItems(gameGui.items, dataBase);
-        dataBase.closeConnections();
+        gameGui.dataBase.establishConnection();
+        System.out.println(gameGui.dataBase.getConnection());
+        gameGui.loadItems(gameGui.items, gameGui.dataBase);
+        //gameGui.dataBase.closeConnections();
         gameGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameGui.frame.setSize(700, 600);
         gameGui.frame.setVisible(true);
@@ -118,13 +121,29 @@ public class GameGui extends Frame implements ActionListener{
             this.panelGame.add(attackButton);
             this.panelGame.add(this.playerLabel);
             this.panelGame.add(this.enemyLabel);
+            if(!this.player.itemsEmpty())
+            {
+                this.chooseItem = new JButton("Choose Item");
+                this.chooseItem.addActionListener(this);
+                this.panelGame.add(this.chooseItem);
+            }
             this.frame.setVisible(true);
+        }
+        else
+        {
+            String queury = "INSERT INTO PREVIOUSSCORES VALUES ('"+this.player.name+"', "+this.player.health+", "+this.player.maxHealth+", "+this.player.damage+", "+this.player.hitChance+", TRUE)";
+            this.dataBase.updateDB(queury);
+            this.panelGame.removeAll();
+            this.panelGame.repaint();
+            this.frame.repaint();
+            this.mainMenu();
         }
     }
     
     private void battle()
     {
         this.panelGame.removeAll();
+        this.panelGame.repaint();
         if(this.battle.isPlayerAlive() && this.battle.isEnemyAlive())
         {
             this.playerLabel = new JLabel(this.battle.getPlayerToString());
@@ -190,7 +209,24 @@ public class GameGui extends Frame implements ActionListener{
     
     private void itemChooserMenu()
     {
-        
+        System.out.println("in item chooser");
+        if(!this.player.itemsEmpty())
+        {
+            System.out.println("inside if item chooser");
+            this.panelGame.removeAll();
+            this.panelGame.repaint();
+            this.submitItem = new JButton("Submit Item Choice And Attack");
+            this.submitItem.addActionListener(this);
+            this.panelGame.add(this.itemInput);
+            this.panelGame.add(this.submitItem);
+            for(int i = 0; i < this.player.itemsSize(); i++)
+            {
+                String labelInput = i + " :" + this.player.getItem(i);
+                JLabel label = new JLabel(labelInput);
+                this.panelGame.add(label);
+            }
+            this.frame.setVisible(true);
+        }
     }
     
     private void loadItems(ArrayList<Item> items, DBManager dataBase)
@@ -259,6 +295,10 @@ public class GameGui extends Frame implements ActionListener{
             this.panelMainMenu.repaint();
             this.frame.remove(this.panelMainMenu);
             this.frame.repaint();
+           // this.dataBase.getConnection();
+            this.enemies = new LinkedList<Character>();
+            this.loadEnemies(enemies, dataBase);
+          //  this.dataBase.closeConnections();
             this.createUser();
         }
         if(source == prevScores)
@@ -274,7 +314,7 @@ public class GameGui extends Frame implements ActionListener{
             }
             else{
                 this.userNameInputed = true;
-                this.player = new Player(username, 10, 40, 40);
+                this.player = new Player(username, 150, 40, 40);
                 this.panelGame.removeAll();
                 this.enemyIndex = 0;
                 this.battleStart();
@@ -317,6 +357,27 @@ public class GameGui extends Frame implements ActionListener{
         {
             this.battle.upgradePlayerHitChance();
             this.battleStart();
+        }
+        if(source == chooseItem)
+        {
+            this.itemChooserMenu();
+        }
+        if(source == submitItem)
+        {
+            String itemInput = this.itemInput.getText();
+            try{
+                int itemInputToInt = Integer.parseInt(itemInput);
+                
+                if(itemInputToInt < this.player.itemsSize())
+                {
+                    this.player.useItem(itemInputToInt);
+                    this.battle.Attack();
+                    this.battle();
+                }
+            }
+            catch(NumberFormatException ex){
+                
+            }
         }
     }
    }

@@ -51,6 +51,21 @@ Constructor for BattleField class
         return false;
     }
     
+    public void upgradePlayerHealth()
+    {
+        this.player.increaseHealth(40);
+    }
+    
+    public void upgradePlayerAttack()
+    {
+        this.player.increaseDamage(20);
+    }
+      
+    public void upgradePlayerHitChance()
+    {
+        this.player.hitChanceIncrease(10);   
+    }
+    
     public Item givePlayerItem()
     {
         Random random = new Random();

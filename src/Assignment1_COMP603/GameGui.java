@@ -30,7 +30,10 @@ public class GameGui extends Frame implements ActionListener{
     JPanel panelMainMenu;
     JPanel panelGame;
     JButton prevScores;
-     JButton nextButton;
+    JButton nextButton;
+    JButton attackUpgrade;
+    JButton healthUpgrade;
+    JButton hitChanceUpgrade;
     JTextField userNameInput = new JTextField("", 30);
     JButton userNameSubmit = new JButton("Submit");
     JFrame frame = new JFrame("RPG_Game");
@@ -40,6 +43,7 @@ public class GameGui extends Frame implements ActionListener{
     JLabel attackInfo;
     JLabel finalAttackInfo;
     boolean userNameInputed;
+    int enemyIndex;
     Player player;
     BattleField battle;
     ArrayList<Item> items = new ArrayList<Item>();
@@ -48,6 +52,7 @@ public class GameGui extends Frame implements ActionListener{
     public GameGui()
     {
         this.panelGame = new JPanel(new GridLayout(8, 1));
+        this.enemyIndex = 0;
     }
     
     public static void main(String[] args) {
@@ -79,6 +84,7 @@ public class GameGui extends Frame implements ActionListener{
         panelMainMenu.add(prevScores);
         this.frame.add(this.panelMainMenu);
         this.frame.setVisible(true);
+        this.panelMainMenu.repaint();
     }
     
     private void createUser()
@@ -89,23 +95,31 @@ public class GameGui extends Frame implements ActionListener{
         this.panelGame.add(userNameInput);
         this.panelGame.add(userNameSubmit);
         this.frame.add(this.panelGame);
+        this.panelGame.revalidate();
+        this.panelGame.repaint();
+        this.frame.repaint();
         this.frame.setVisible(true);
-        
     }
     
     private void battleStart()
     {
-        this.battle = new BattleField(this.player, this.enemies.get(1), this.items);
-        System.out.println("tset");
-        //battle.mainBattle();
-        //this.frame.add(battle.panel, BorderLayout.CENTER);
-        this.attackButton.addActionListener(this);
-        this.playerLabel = new JLabel(this.battle.getPlayerToString());
-        this.enemyLabel = new JLabel(this.battle.getEnemyToString());
-        this.panelGame.add(attackButton);
-        this.panelGame.add(this.playerLabel);
-        this.panelGame.add(this.enemyLabel);
-        this.frame.setVisible(true);
+        this.panelGame.removeAll();
+        this.panelGame.repaint();
+        if(this.enemyIndex < this.enemies.size())
+        {
+            this.battle = new BattleField(this.player, this.enemies.get(enemyIndex), this.items);
+            this.enemyIndex++;
+            System.out.println("tset");
+            //battle.mainBattle();
+            //this.frame.add(battle.panel, BorderLayout.CENTER);
+            this.attackButton.addActionListener(this);
+            this.playerLabel = new JLabel(this.battle.getPlayerToString());
+            this.enemyLabel = new JLabel(this.battle.getEnemyToString());
+            this.panelGame.add(attackButton);
+            this.panelGame.add(this.playerLabel);
+            this.panelGame.add(this.enemyLabel);
+            this.frame.setVisible(true);
+        }
     }
     
     private void battle()
@@ -160,7 +174,18 @@ public class GameGui extends Frame implements ActionListener{
     
     private void upgradeMenu()
     {
-        
+        this.panelGame.removeAll();
+        this.panelGame.repaint();
+        this.attackUpgrade = new JButton("Upgrade Attack by 20");
+        this.healthUpgrade = new JButton("Upgrade Health by 40");
+        this.hitChanceUpgrade = new JButton("Upgrade Hit Chance by 10");
+        this.attackUpgrade.addActionListener(this);
+        this.healthUpgrade.addActionListener(this);
+        this.hitChanceUpgrade.addActionListener(this);
+        this.panelGame.add(this.attackUpgrade);
+        this.panelGame.add(this.healthUpgrade);
+        this.panelGame.add(this.hitChanceUpgrade);
+        this.frame.setVisible(true);
     }
     
     private void itemChooserMenu()
@@ -231,6 +256,9 @@ public class GameGui extends Frame implements ActionListener{
         {
             System.out.println("Start Game clicked");
             this.panelMainMenu.removeAll();
+            this.panelMainMenu.repaint();
+            this.frame.remove(this.panelMainMenu);
+            this.frame.repaint();
             this.createUser();
         }
         if(source == prevScores)
@@ -246,8 +274,9 @@ public class GameGui extends Frame implements ActionListener{
             }
             else{
                 this.userNameInputed = true;
-                this.player = new Player(username, 150, 40, 40);
+                this.player = new Player(username, 10, 40, 40);
                 this.panelGame.removeAll();
+                this.enemyIndex = 0;
                 this.battleStart();
             }
         }
@@ -263,6 +292,33 @@ public class GameGui extends Frame implements ActionListener{
             {
                 this.upgradeMenu();
             }
+            else if(!this.battle.isPlayerAlive())
+            {
+                this.panelGame.removeAll();
+                this.panelGame.repaint();
+                this.frame.remove(this.panelGame);
+                this.frame.remove(this.panelMainMenu);
+                this.frame.repaint();
+                this.enemyIndex = 0;
+                this.mainMenu();
+            }
+        }
+        if(source == attackUpgrade)
+        {
+            this.battle.upgradePlayerAttack();
+            this.battleStart();
+        }
+        if(source == healthUpgrade)
+        {
+            this.battle.upgradePlayerHealth();
+            this.battleStart();
+        }
+        if(source == hitChanceUpgrade)
+        {
+            this.battle.upgradePlayerHitChance();
+            this.battleStart();
         }
     }
-}
+   }
+
+

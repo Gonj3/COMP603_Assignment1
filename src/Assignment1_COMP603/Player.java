@@ -47,12 +47,10 @@ public class Player extends Character {
         this.damageItemCounter();
         if(hitChecker <= this.hitChance + this.hitChanceItemIncrease)
         {
-            System.out.println(printName() + " hit for " + this.damage);
             return this.damage + this.damageItemIncrease;
         }
         else
         {
-            System.out.println(printName() + " failed to hit");
             return 0;
         }
     }

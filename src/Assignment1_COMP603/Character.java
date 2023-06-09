@@ -42,13 +42,11 @@ public class Character {
         //attack hit
         if(hitChecker <= this.hitChance)
         {
-            System.out.println(printName() + " hit for " + this.damage);
             return this.damage;
         }
         //attack failed
         else
         {
-            System.out.println(printName() + " failed to hit");
             return 0;
         }
         

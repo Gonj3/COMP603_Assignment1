@@ -39,24 +39,20 @@ public class Boss extends Character {
 
                 if(specialAttackRandom == 3)
                 {
-                    System.out.println(printName() + " hit for " + this.damage);
                     return specialAttackDamage;
                 }
                 else
                 {
-                    System.out.println(printName() + " hit for " + this.damage);
                     return damage;
                 }
             }
             else
             {
-                System.out.println(printName() + " hit for " + this.damage);
                 return this.damage;
             }
         }
         else
         {
-            System.out.println(printName() + " failed to hit");
             return 0;
         }
     }

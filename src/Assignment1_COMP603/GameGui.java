@@ -158,7 +158,6 @@ public class GameGui extends Frame implements ActionListener{
         {
             this.battle = new BattleField(this.player, this.enemies.get(enemyIndex), this.items);
             this.enemyIndex++;
-            System.out.println("tset");
             //battle.mainBattle();
             //this.frame.add(battle.panel, BorderLayout.CENTER);
             this.attackButton.addActionListener(this);
@@ -255,10 +254,8 @@ public class GameGui extends Frame implements ActionListener{
     
     private void itemChooserMenu()
     {
-        System.out.println("in item chooser");
         if(!this.player.itemsEmpty())
         {
-            System.out.println("inside if item chooser");
             this.panelGame.removeAll();
             this.panelGame.repaint();
             this.submitItem = new JButton("Submit Item Choice And Attack");
@@ -302,7 +299,6 @@ public class GameGui extends Frame implements ActionListener{
         } catch (SQLException ex) {
             Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(items);
     }
     
     private void loadEnemies(LinkedList<Character> enemies, DBManager dataBase)
@@ -327,7 +323,6 @@ public class GameGui extends Frame implements ActionListener{
         } catch (SQLException ex) {
             Logger.getLogger(GameGui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(enemies);
     }
 
     @Override
@@ -336,7 +331,6 @@ public class GameGui extends Frame implements ActionListener{
         
         if(source == startGame)
         {
-            System.out.println("Start Game clicked");
             this.panelMainMenu.removeAll();
             this.panelMainMenu.repaint();
             this.frame.remove(this.panelMainMenu);
@@ -378,7 +372,6 @@ public class GameGui extends Frame implements ActionListener{
         }
         if(source == nextButton)
         {
-            System.out.println("nextButton worked");
             if(this.battle.isPlayerAlive())
             {
                 this.upgradeMenu();
